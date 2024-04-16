@@ -6,22 +6,24 @@ public class ObjectCollision : MonoBehaviour,IPooledObjects
 {
     Rigidbody objectRigidbody;
     ObjectRotate objectRotate;
+    BoxCollider boxCollider;
     bool collidedwithWall = false;
     private void Awake()
     {
         objectRigidbody = GetComponent<Rigidbody>();
         objectRotate = gameObject.GetComponent<ObjectRotate>();
+        boxCollider = gameObject.GetComponent<BoxCollider>();
        
     }
     public void OnObjectSpawn()
     {
+        boxCollider.enabled = true;
         objectRigidbody.isKinematic = false;
         objectRotate.isRotating = true;
         gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
         collidedwithWall = false;
     }
 
-    // Start is called before the first frame update
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -30,6 +32,7 @@ public class ObjectCollision : MonoBehaviour,IPooledObjects
             if(!collidedwithWall)
             {
                 collidedwithWall = true;
+                boxCollider.enabled = false;
                 objectRigidbody.isKinematic = true;
                 objectRotate.isRotating = false;
                 Invoke("SetObjectDeactive", 1);

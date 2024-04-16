@@ -9,36 +9,38 @@ public class ObjectThrow : MonoBehaviour
 
     public GameObject prefab;
     [SerializeField]private Camera mainCamera;
+    GameManager gameManager;
 
-    private void Awake()
+    private void Start()
     {
         objectPooler = ObjectPooler.Instance;
+        gameManager = GameManager.gameManagerInstance;
     }
     void Update()
     {
-        Aim();
+        CheckIfGameStarted();
+        
+    }
+    void CheckIfGameStarted()
+    {
+        if(gameManager.gameStarted)
+        {
+            Aim();
+        }
+      
     }
     private void Aim()
     {
         var (success, position) = GetMousePosition();
         if (success)
         {
-            // Calculate the direction
             var direction = position - transform.position;
-
-            //// You might want to delete this line.
-            //// Ignore the height difference.
-            //direction.y = 0;
-
-            // Make the transform look in the direction.
             transform.forward = direction;
             if (Input.GetMouseButtonDown(0))
-            {
-               
+            {        
                GameObject obj= objectPooler.SpawnFromPool("AXE", gameObject.transform.position);
-                obj.transform.forward = direction;
-                //obj.GetComponent<Rigidbody>().velocity = direction * 2;
-                obj.GetComponent<Rigidbody>().AddForce(direction * 250, ForceMode.Impulse);
+               obj.transform.forward = direction;
+               obj.GetComponent<Rigidbody>().AddForce(direction * 250, ForceMode.Impulse);
             }
         }
     }
@@ -49,12 +51,10 @@ public class ObjectThrow : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
         {
-            // The Raycast hit something, return with the position.
             return (success: true, position: hitInfo.point);
         }
         else
         {
-            // The Raycast did not hit anything.
             return (success: false, position: Vector3.zero);
         }
     }

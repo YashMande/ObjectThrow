@@ -36,7 +36,7 @@ public class SpawnManager : MonoBehaviour
     {
         spawnDelay = Random.Range(spawnDelayMin, spawnDelayMax);
         StartCoroutine(WaitTimerBeforeNextSpawn());
-        spawnPointNumber = Random.Range(0, 14);
+        spawnPointNumber = Random.Range(0, 9);
         spawnPoint[spawnPointNumber].SetTheForceAndAngle();
     }
     IEnumerator WaitTimerBeforeNextSpawn()

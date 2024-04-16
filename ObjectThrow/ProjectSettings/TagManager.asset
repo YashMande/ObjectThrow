@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Wall
   - AXE
+  - DoubleLine
+  - Crate
   layers:
   - Default
   - TransparentFX
